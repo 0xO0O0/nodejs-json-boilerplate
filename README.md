@@ -2,7 +2,7 @@ nodejs-json-boilerplate
 =======================
 
 Node.js project boilerplate for a json API server.  This project is based
-loosley on this one: https://github.com/angular-app/angular-app with
+loosley on the server portion of this one: https://github.com/angular-app/angular-app with
 modifications that suite my needs.  It's stack consists of:
 
 * Node.js
