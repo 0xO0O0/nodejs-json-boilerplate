@@ -20,8 +20,8 @@ server if that is what you desire.
 The Gruntfile has the following features:
 
 * jshint: Validate files with JSHint.
-* nodeunit: Run Nodeunit unit tests.
-* default: Alias for "jshint", "nodeunit" tasks.
-* timestamp: Log the current time and date to the console.
+* karma: Run Karma test runner.
+* default: Alias for "jshint", "karma" tasks.
 * supervise: Runs the app and watches for code changes. If any changes are
   detected it automatically reloads the app.
+* test: alias for "karma" task.
