@@ -20,8 +20,10 @@ server if that is what you desire.
 The Gruntfile has the following features:
 
 * jshint: Validate files with JSHint.
-* karma: Run Karma test runner.
-* default: Alias for "jshint", "karma" tasks.
+* simplemocha: Run tests with mocha.
+* watch: Monitor spec directory for changes. If any changes are detected it
+  automatically runs the tests.
+* default: Alias for "jshint", "simplemocha", and "watch" tasks.
 * supervise: Runs the app and watches for code changes. If any changes are
   detected it automatically reloads the app.
-* test: alias for "karma" task.
+* test: alias for "simplemocha" task.
