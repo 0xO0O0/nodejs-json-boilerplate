@@ -3,7 +3,8 @@
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Project configuration.
   grunt.initConfig({
@@ -23,20 +24,31 @@ module.exports = function(grunt) {
         globals: { require: false, __dirname: false, console: false, module: false, exports: false }
       }
     },
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js'
+    simplemocha:{
+      options:{
+        globals: ['should'],
+        reporter: 'spec',
+        slow: 200,
+        timeout: 1000
+      },
+
+      all: {src: 'spec/**/*.js' }
+    },
+    watch:{
+      all:{
+        files:['spec/**/*.js'],
+        tasks:['test']
       }
     }
   });
 
   // Default task.
-  grunt.registerTask('default', ['jshint','karma']);
+  grunt.registerTask('default', ['jshint', 'simplemocha', 'watch:all']);
 
   grunt.registerTask('supervise', function() {
     this.async();
     require('supervisor').run(['app/app.js']);
   });
 
-  grunt.registerTask('test',  ['karma']);
+  grunt.registerTask('test', 'simplemocha');
 };
