@@ -13,7 +13,7 @@ describe('Node API Server', function() {
       .get('/')
       .expect(404, done);
   });
-  it('Should get {hello:world}', function(done) {
+  it('Should get "{hello:world}"', function(done) {
     request(app)
       .get('/hello.json')
       .expect('Content-Type', /json/)
