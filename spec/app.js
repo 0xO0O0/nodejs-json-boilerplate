@@ -23,7 +23,6 @@ describe('Node API Server', function() {
         done();
       });
   });
-});
   it('Should get "Unauthorized"', function(done) {
     request(app)
       .get('/authorized.json')
@@ -33,3 +32,4 @@ describe('Node API Server', function() {
         done();
       });
   });
+});
