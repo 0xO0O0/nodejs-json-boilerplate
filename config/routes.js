@@ -1,3 +1,21 @@
+var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Invalid credentials.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Invalid credentials.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
 exports.addRoutes = function(app, config) {
   // Basic Restful Routes
   // app.get('/blogs', function (req, res) {
@@ -22,6 +40,14 @@ exports.addRoutes = function(app, config) {
   //   res.send({route: 'delete'});
   // });
 
+  app.get('/hello.json', function(req, res){
+    res.send({hello: 'world'});
+  });
+
+  // Protected ROUTE
+  app.get('/authorized.json', passport.authenticate('local'), function(req, res){
+    res.send({authorized: 'hello world'});
+  });
 
   // This route enables HTML5Mode by sending missing files an error
   app.all('/*', function(req, res) {
