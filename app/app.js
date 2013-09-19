@@ -1,22 +1,28 @@
+var path = require('path');
+var ROOT = path.resolve(__dirname) + '/..';
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
-var path = require('path');
 var express = require('express');
 require('express-namespace');
-var privateKey  = fs.readFileSync(__dirname + '/cert/privatekey.pem').toString();
-var certificate = fs.readFileSync(__dirname + '/cert/certificate.pem').toString();
+var privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString();
+var certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString();
 var credentials = {key: privateKey, cert: certificate};
+var passport = require('passport');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var ROOT = path.resolve(__dirname) + '/..';
+mongoose.connect('mongodb://localhost/restapp');
 
-var config = require(ROOT + '/config/config.js');
+var config = require(ROOT + '/config/config');
 var xsrf = require(ROOT + '/lib/xsrf');
 var protectJSON = require(ROOT + '/lib/protectJSON');
 
 var app = express();
 var secureServer = https.createServer(credentials, app);
 var server = http.createServer(app);
+
+var userModel = require(ROOT + '/app/models/user.js');
 
 app.use(protectJSON);
 
@@ -25,8 +31,10 @@ app.use(express.bodyParser());                              // Extract the data 
 app.use(express.cookieParser(config.server.cookieSecret));  // Hash cookies with this secret
 app.use(express.cookieSession());                           // Store the session in the (secret) cookie
 app.use(xsrf);                                              // Add XSRF checks to the request
+app.use(passport.initialize());                             // Initialize authentication
 
-require(ROOT + '/config/routes').addRoutes(app, config);
+require(ROOT + '/lib/security').Security(passport, userModel.User);
+require(ROOT + '/config/routes').addRoutes(app, config, passport);
 
 // A standard error handler - it picks up any left over errors and returns a nicely formatted server 500 error
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));

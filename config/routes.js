@@ -1,23 +1,5 @@
-var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    User = require('../app/models/user.js');
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Invalid credentials.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Invalid credentials.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
-exports.addRoutes = function(app, config) {
+exports.addRoutes = function(app, config, passport) {
   // Basic Restful Routes
   // app.get('/blogs', function (req, res) {
   //   res.send({route: 'index'});
@@ -41,12 +23,16 @@ exports.addRoutes = function(app, config) {
   //   res.send({route: 'delete'});
   // });
 
-  app.get('/hello.json', function(req, res){
+  app.get('/hello', function(req, res){
     res.send({hello: 'world'});
   });
 
+  app.post('/login', passport.authenticate('rest'), function (req, res) {
+    console.log('LOGIN');
+  });
+
   // Protected ROUTE
-  app.get('/authorized.json', passport.authenticate('local'), function(req, res){
+  app.get('/authorized', passport.authenticate('rest'), function(req, res){
     res.send({authorized: 'hello world'});
   });
 
