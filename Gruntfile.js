@@ -32,12 +32,12 @@ module.exports = function(grunt) {
         timeout: 1000
       },
 
-      all: {src: 'spec/**/*.js' }
+      all: {src: ['spec/**/*.js'] }
     },
     watch:{
       all:{
-        files:['spec/**/*.js'],
-        tasks:['test']
+        files:['spec/**/*.js', 'app/**/*.js', 'lib/**/*.js'],
+        tasks:['simplemocha']
       }
     }
   });
