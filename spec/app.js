@@ -6,10 +6,10 @@ var config = require('../config/config');
 var passport = require('passport');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/myapp');
+mongoose.connect('mongodb://localhost/restapp');
 
-var model = require('../app/models/user.js');
-require('../lib/security').Security(passport, model.User);
+var userModel = require('../app/models/user.js');
+require('../lib/security').Security(passport, userModel.User);
 
 var app = express();
 app.use(passport.initialize());
@@ -23,7 +23,7 @@ describe('Node API Server', function() {
   });
   it('Should get "{hello:world}"', function(done) {
     request(app)
-      .get('/hello.json')
+      .get('/hello')
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function(err,res){
@@ -33,7 +33,7 @@ describe('Node API Server', function() {
   });
   it('Should get "Unauthorized"', function(done) {
     request(app)
-      .get('/authorized.json')
+      .get('/authorized')
       .expect(401)
       .end(function(err,res) {
         res.text.should.equal('Unauthorized');
@@ -41,15 +41,16 @@ describe('Node API Server', function() {
       });
   });
   it('Should login', function(done) {
+    var credentials = {
+      username: 'test',
+      password: 'secret'
+    };
     request(app)
       .post('/login')
-      .send({
-        username: 'test',
-        password: 'secret'
-      })
+      .send(credentials)
       .expect(200)
       .end(function(err,res) {
-        res.text.should.equal('Unauthorized');
+        res.body.should.have.property('authorized', 'hello world');
         done();
       });
   });

@@ -10,8 +10,14 @@ exports.User = ( function () {
 
   var _model = mongoose.model('User', _schema);
 
+  var _validPassword = function (password) {
+    // TODO: add a valid check
+    return true;
+  };
+
   return {
     schema: _schema,
-    model: _model
+    model: _model,
+    validPassword: _validPassword
   };
 }() );

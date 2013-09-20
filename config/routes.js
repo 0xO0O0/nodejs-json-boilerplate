@@ -28,7 +28,7 @@ exports.addRoutes = function(app, config, passport) {
   });
 
   app.post('/login', passport.authenticate('rest'), function (req, res) {
-    console.log('LOGIN');
+    res.send({token: req.user.token});
   });
 
   // Protected ROUTE
