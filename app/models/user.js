@@ -1,3 +1,4 @@
+var bcrypt = require('bcrypt');
 
 exports.User = ( function () {
   var mongoose = require('mongoose');
@@ -5,19 +6,28 @@ exports.User = ( function () {
 
   var _schema = new Schema({
     username: String,
-    password: String
+    hash: String,
+    token: String
   });
 
   var _model = mongoose.model('User', _schema);
 
-  var _validPassword = function (password) {
-    // TODO: add a valid check
-    return true;
+  var _isPasswordValid = function (password, done, userFound, fn) {
+    bcrypt.compare(password, userFound.hash, function (err, res) {
+      if (res) {
+        // match
+        fn(null, done, userFound);
+      }
+      else {
+        // doesn't match
+        fn('Credentials are invalid', done, userFound);
+      }
+    });
   };
 
   return {
     schema: _schema,
     model: _model,
-    validPassword: _validPassword
+    isPasswordValid: _isPasswordValid
   };
 }() );
