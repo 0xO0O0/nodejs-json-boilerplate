@@ -31,6 +31,10 @@ exports.userCtrl = ( function () {
   this._create = function (req, res) {
     bcrypt.genSalt(10, function(err, salt) {
       bcrypt.hash(req.body.password, salt, function(err, hash) {
+        if (!req.body.password) {
+          // need some validation on the password
+          hash = '';
+        }
         var token = uuid.v4(); //TODO: if this site ever spans more than one server we made need to revisit this
         var userObject = {
           username: req.body.username,
@@ -73,6 +77,8 @@ exports.userCtrl = ( function () {
       });
     }
     else {
+      // allow an empty password on update so a username can be changed without
+      // requiring the password be changed too
       UserModel.findOne({_id: req.params.id}, function (err, user) {
         if (err) {
           res.status(500).send({error: err});

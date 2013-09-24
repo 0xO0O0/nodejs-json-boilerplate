@@ -12,6 +12,16 @@ exports.User = ( function () {
 
   var _model = mongoose.model('User', _schema);
 
+  var required = function (value) {
+    if (value) {
+      return true; 
+    }
+
+    return false;
+  }
+  _schema.path('username').validate(required, 'Invalid');
+  _schema.path('hash').validate(required, 'Invalid');
+
   var _isPasswordValid = function (password, done, userFound, fn) {
     bcrypt.compare(password, userFound.hash, function (err, res) {
       if (res) {
