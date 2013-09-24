@@ -1,25 +1,27 @@
 
-exports.addRoutes = function(app, config, passport) {
+var passport = require('passport');
+
+exports.addRoutes = function(app) {
   // Basic Restful Routes
   // app.get('/blogs', function (req, res) {
   //   res.send({route: 'index'});
   // });
-  // app.get('/blogs/add', function (req, res) {
+  // app.get('/blog/add', function (req, res) {
   //   res.send({route: 'add'});
   // });
-  // app.get('/blogs/:id', function (req, res) {
+  // app.get('/blog/:id', function (req, res) {
   //   res.send({route: 'show'});
   // });
-  // app.get('/blogs/:id/edit', function (req, res) {
+  // app.get('/blog/:id/edit', function (req, res) {
   //   res.send({route: 'edit'});
   // });
-  // app.post('/blogs', function (req, res) {
+  // app.post('/blog', function (req, res) {
   //   res.send({route: 'create'});
   // });
-  // app.put('/blogs/:id', function (req, res) {
+  // app.put('/blog/:id', function (req, res) {
   //   res.send({route: 'update'});
   // });
-  // app.del('/blogs/:id', function (req, res) {
+  // app.del('/blog/:id', function (req, res) {
   //   res.send({route: 'delete'});
   // });
 
@@ -34,6 +36,24 @@ exports.addRoutes = function(app, config, passport) {
   // Protected ROUTE
   app.get('/authorized', passport.authenticate('rest'), function(req, res){
     res.send({authorized: 'hello world'});
+  });
+
+  // USERS
+  var userRoutes = require('../app/controllers/userCtrl.js');
+  app.get('/users', function (req, res) {
+    userRoutes.userCtrl.index(req,res);
+  });
+  app.get('/user/:id', function (req, res) {
+    userRoutes.userCtrl.show(req,res);
+  });
+  app.post('/user', function (req, res) {
+    userRoutes.userCtrl.create(req,res);
+  });
+  app.put('/user/:id', function (req, res) {
+    userRoutes.userCtrl.update(req,res);
+  });
+  app.del('/user/:id', function (req, res) {
+    userRoutes.userCtrl.destroy(req,res);
   });
 
   // This route enables HTML5Mode by sending missing files an error

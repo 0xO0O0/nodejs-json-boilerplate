@@ -22,8 +22,6 @@ var app = express();
 var secureServer = https.createServer(credentials, app);
 var server = http.createServer(app);
 
-var userModel = require(ROOT + '/app/models/user.js');
-
 app.use(protectJSON);
 
 app.use(express.logger());                                  // Log requests to the console
@@ -33,8 +31,8 @@ app.use(express.cookieSession());                           // Store the session
 app.use(xsrf);                                              // Add XSRF checks to the request
 app.use(passport.initialize());                             // Initialize authentication
 
-require(ROOT + '/lib/security').Security(passport, userModel.User);
-require(ROOT + '/config/routes').addRoutes(app, config, passport);
+require(ROOT + '/lib/security').Security();
+require(ROOT + '/config/routes').addRoutes(app);
 
 // A standard error handler - it picks up any left over errors and returns a nicely formatted server 500 error
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
