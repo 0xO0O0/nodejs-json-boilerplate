@@ -41,6 +41,7 @@ Follow the installation instructions for each of those packages.
 
 * git clone git@github.com:socketwiz/nodejs-json-boilerplate.git
 * cd nodejs-json-boilerplate
+* npm install
 * git supervise
 
 Now you can use a tool like curl or my personal favorite httpie [https://github.com/jkbr/httpie](https://github.com/jkbr/httpie).
