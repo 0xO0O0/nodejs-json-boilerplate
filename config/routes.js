@@ -1,7 +1,7 @@
 
 var passport = require('passport');
 
-exports.addRoutes = function(app) {
+exports.routes = function(app) {
   // Basic Restful Routes
   // app.get('/blogs', function (req, res) {
   //   res.send({route: 'index'});

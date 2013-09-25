@@ -1,19 +1,22 @@
-var request = require('supertest');
-var express = require('express');
-var assert = require('assert');
-var should = require('should');
-var config = require('../config/config');
-var passport = require('passport');
-var mongoose = require('mongoose');
+var request = require('supertest'),
+    express = require('express'),
+    assert = require('assert'),
+    should = require('should'),
+    config = require('../config/config'),
+    passport = require('passport'),
+    mongoose = require('mongoose'),
+    path = require('path');
+
+var ROOT = path.resolve(__dirname) + '/..';
 
 mongoose.connect('mongodb://localhost/restapp');
 
-var userModel = require('../app/models/user.js');
-require('../lib/security').Security(passport, userModel.User);
+require(ROOT + '/lib/security').Security();
 
 var app = express();
+app.use(express.bodyParser());
 app.use(passport.initialize());
-require('../config/routes').addRoutes(app, config, passport);
+require('../config/routes').routes(app);
 
 describe('Node API Server', function() {
   it('Should 404 /', function(done) {
@@ -50,7 +53,7 @@ describe('Node API Server', function() {
       .send(credentials)
       .expect(200)
       .end(function(err,res) {
-        res.body.should.have.property('authorized', 'hello world');
+        res.body.should.have.property('token');
         done();
       });
   });

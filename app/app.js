@@ -44,7 +44,7 @@ app.use(xsrf);                                              // Add XSRF checks t
 app.use(passport.initialize());                             // Initialize authentication
 
 require(ROOT + '/lib/security').Security();
-require(ROOT + '/config/routes').addRoutes(app);
+require(ROOT + '/config/routes').routes(app);
 
 // A standard error handler - it picks up any left over errors and returns a nicely formatted server 500 error
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
