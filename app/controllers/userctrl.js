@@ -1,4 +1,4 @@
-
+/*jslint node: true */
 var bcrypt = require('bcrypt');
 var uuid = require('node-uuid');
 

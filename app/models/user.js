@@ -18,7 +18,8 @@ exports.User = ( function () {
     }
 
     return false;
-  }
+  };
+
   _schema.path('username').validate(required, 'Invalid');
   _schema.path('hash').validate(required, 'Invalid');
 

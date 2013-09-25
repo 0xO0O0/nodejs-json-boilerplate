@@ -1,8 +1,10 @@
+/*jslint node: true */
+"use strict";
 global.myapp = {};
 myapp.controllers = {};
 myapp.models = {};
 
-var path = require('path'),
+var path = require('path');
 var ROOT = path.resolve(__dirname) + '/..';
 
 var fs = require('fs'),

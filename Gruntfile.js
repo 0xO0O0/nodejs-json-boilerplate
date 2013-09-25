@@ -21,7 +21,8 @@ module.exports = function(grunt) {
         undef: true,
         boss: true,
         eqnull: true,
-        globals: { require: false, __dirname: false, console: false, module: false, exports: false }
+        node: true,
+        globals: { require: false, __dirname: false, console: false, module: false, exports: false, myapp: false }
       }
     },
     simplemocha:{
