@@ -1,20 +1,31 @@
-var path = require('path');
+global.myapp = {};
+myapp.controllers = {};
+myapp.models = {};
+
+var path = require('path'),
 var ROOT = path.resolve(__dirname) + '/..';
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var express = require('express');
+
+var fs = require('fs'),
+  http = require('http'),
+  https = require('https'),
+  express = require('express'),
+  privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString(),
+  certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString(),
+  credentials = {key: privateKey, cert: certificate},
+  passport = require('passport'),
+  mongoose = require('mongoose'),
+  Schema = mongoose.Schema;
+
 require('express-namespace');
-var privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString();
-var certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString();
-var credentials = {key: privateKey, cert: certificate};
-var passport = require('passport');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost/restapp');
+myapp.config = require(ROOT + '/config/config');
+myapp.controllers.user = require(ROOT + '/app/controllers/userCtrl.js').userCtrl;
+myapp.models.user = require(ROOT + '/app/models/user.js').User.model;
 
-var config = require(ROOT + '/config/config');
+mongoose.connect(
+  'mongodb://' + myapp.config.mongo.host + ':' + myapp.config.mongo.port + '/' + myapp.config.mongo.db
+);
+
 var xsrf = require(ROOT + '/lib/xsrf');
 var protectJSON = require(ROOT + '/lib/protectJSON');
 
@@ -26,7 +37,7 @@ app.use(protectJSON);
 
 app.use(express.logger());                                  // Log requests to the console
 app.use(express.bodyParser());                              // Extract the data from the body of the request
-app.use(express.cookieParser(config.server.cookieSecret));  // Hash cookies with this secret
+app.use(express.cookieParser(myapp.config.server.cookieSecret));  // Hash cookies with this secret
 app.use(express.cookieSession());                           // Store the session in the (secret) cookie
 app.use(xsrf);                                              // Add XSRF checks to the request
 app.use(passport.initialize());                             // Initialize authentication
@@ -38,11 +49,11 @@ require(ROOT + '/config/routes').addRoutes(app);
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
 // Start up the server on the port specified in the config
-server.listen(config.server.listenPort, '0.0.0.0', 511, function() {
-  // // Once the server is listening we automatically open up a browser
-  var open = require('open');
-  open('http://localhost:' + config.server.listenPort + '/');
+server.listen(myapp.config.server.listenPort, '0.0.0.0', 511, function() {
+  console.log('My App Server - listening on port: ' + myapp.config.server.listenPort);
 });
-console.log('My App Server - listening on port: ' + config.server.listenPort);
-secureServer.listen(config.server.securePort);
-console.log('My App Server - listening on secure port: ' + config.server.securePort);
+secureServer.listen(myapp.config.server.securePort, function () {
+  console.log('My App Server - listening on secure port: ' + myapp.config.server.securePort);
+});
+
+module.exports = myapp;

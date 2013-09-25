@@ -39,21 +39,20 @@ exports.addRoutes = function(app) {
   });
 
   // USERS
-  var userRoutes = require('../app/controllers/userCtrl.js');
   app.get('/users', function (req, res) {
-    userRoutes.userCtrl.index(req,res);
+    myapp.controllers.user.index(req,res);
   });
   app.get('/user/:id', function (req, res) {
-    userRoutes.userCtrl.show(req,res);
+    myapp.controllers.user.show(req,res);
   });
   app.post('/user', function (req, res) {
-    userRoutes.userCtrl.create(req,res);
+    myapp.controllers.user.create(req,res);
   });
   app.put('/user/:id', function (req, res) {
-    userRoutes.userCtrl.update(req,res);
+    myapp.controllers.user.update(req,res);
   });
   app.del('/user/:id', function (req, res) {
-    userRoutes.userCtrl.destroy(req,res);
+    myapp.controllers.user.destroy(req,res);
   });
 
   // This route enables HTML5Mode by sending missing files an error

@@ -1,13 +1,10 @@
 
 var bcrypt = require('bcrypt');
 var uuid = require('node-uuid');
-var userModel = require('../models/user.js');
 
 exports.userCtrl = ( function () {
-  var UserModel = userModel.User.model;
-
   this._index = function (req, res) {
-    UserModel.find(function(err, users){
+    myapp.models.user.find(function(err, users){
       if (err) {
         res.status(500).send({error: err});
       }
@@ -18,7 +15,7 @@ exports.userCtrl = ( function () {
   };
 
   this._show = function (req, res) {
-    UserModel.find({_id: req.params.id}, function (err, user) {
+    myapp.models.user.find({_id: req.params.id}, function (err, user) {
       if (err) {
         res.status(500).send({error: err});
       }
@@ -41,7 +38,7 @@ exports.userCtrl = ( function () {
           hash: hash,
           token: token
         };
-        var user = new UserModel(userObject);
+        var user = new myapp.models.user(userObject);
         user.save(function(err) {
           if (err) {
             res.status(500).send({error: err});
@@ -58,7 +55,7 @@ exports.userCtrl = ( function () {
     if (req.body.password) {
       bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(req.body.password, salt, function(err, hash) {
-          UserModel.findOne({_id: req.params.id}, function (err, user) {
+          myapp.models.user.findOne({_id: req.params.id}, function (err, user) {
             if (err) {
               res.status(500).send({error: err});
             }
@@ -79,7 +76,7 @@ exports.userCtrl = ( function () {
     else {
       // allow an empty password on update so a username can be changed without
       // requiring the password be changed too
-      UserModel.findOne({_id: req.params.id}, function (err, user) {
+      myapp.models.user.findOne({_id: req.params.id}, function (err, user) {
         if (err) {
           res.status(500).send({error: err});
         }
@@ -97,7 +94,7 @@ exports.userCtrl = ( function () {
   };
 
   this._destroy = function (req, res) {
-    UserModel.findOne({_id: req.params.id}, function (err, user) {
+    myapp.models.user.findOne({_id: req.params.id}, function (err, user) {
       if (err) {
         res.status(500).send({error: err});
       }

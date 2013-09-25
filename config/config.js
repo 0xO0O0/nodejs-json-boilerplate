@@ -2,6 +2,9 @@ var path = require('path');
 
 module.exports = {
   mongo: {
+    host: 'localhost',
+    port: 27017,
+    db: 'restapp'
   },
   security: {
     dbName: ''                                           // The name of database that contains the security information
