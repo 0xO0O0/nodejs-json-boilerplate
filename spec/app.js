@@ -57,4 +57,24 @@ describe('Node API Server', function() {
         done();
       });
   });
+  it('Should use a token to access an authorized resource', function(done) {
+    var credentials = {
+      username: 'test',
+      password: 'secret'
+    };
+    request(app)
+      .post('/login')
+      .send(credentials)
+      .expect(200)
+      .end(function(err,res) {
+        request(app)
+          .get('/authorized')
+          .send({token: res.body.token})
+          .expect(200)
+          .end(function(err,res){
+            res.body.should.have.property('authorized');
+            done();
+          });
+      });
+  });
 });
