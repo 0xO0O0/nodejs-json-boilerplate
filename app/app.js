@@ -27,7 +27,6 @@ mongoose.connect(
 var privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString();
 var certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString();
 var credentials = {key: privateKey, cert: certificate};
-var xsrf = require(ROOT + '/lib/xsrf');
 var protectJSON = require(ROOT + '/lib/protectJSON');
 
 var app = express();
@@ -38,9 +37,6 @@ app.use(protectJSON);
 
 app.use(express.logger());                                  // Log requests to the console
 app.use(express.bodyParser());                              // Extract the data from the body of the request
-app.use(express.cookieParser(myapp.config.server.cookieSecret));  // Hash cookies with this secret
-app.use(express.cookieSession());                           // Store the session in the (secret) cookie
-app.use(xsrf);                                              // Add XSRF checks to the request
 app.use(passport.initialize());                             // Initialize authentication
 
 require(ROOT + '/lib/security').Security();
