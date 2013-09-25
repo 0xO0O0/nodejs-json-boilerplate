@@ -1,4 +1,3 @@
-/*jslint node: true */
 "use strict";
 global.myapp = {};
 myapp.controllers = {};
@@ -11,9 +10,6 @@ var fs = require('fs'),
   http = require('http'),
   https = require('https'),
   express = require('express'),
-  privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString(),
-  certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString(),
-  credentials = {key: privateKey, cert: certificate},
   passport = require('passport'),
   mongoose = require('mongoose'),
   Schema = mongoose.Schema;
@@ -28,6 +24,9 @@ mongoose.connect(
   'mongodb://' + myapp.config.mongo.host + ':' + myapp.config.mongo.port + '/' + myapp.config.mongo.db
 );
 
+var privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString();
+var certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString();
+var credentials = {key: privateKey, cert: certificate};
 var xsrf = require(ROOT + '/lib/xsrf');
 var protectJSON = require(ROOT + '/lib/protectJSON');
 

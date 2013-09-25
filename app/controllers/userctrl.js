@@ -1,9 +1,9 @@
-/*jslint node: true */
+"use strict";
 var bcrypt = require('bcrypt');
 var uuid = require('node-uuid');
 
 exports.userCtrl = ( function () {
-  this._index = function (req, res) {
+  var _index = function (req, res) {
     myapp.models.user.find(function(err, users){
       if (err) {
         res.status(500).send({error: err});
@@ -14,7 +14,7 @@ exports.userCtrl = ( function () {
     });
   };
 
-  this._show = function (req, res) {
+  var _show = function (req, res) {
     myapp.models.user.find({_id: req.params.id}, function (err, user) {
       if (err) {
         res.status(500).send({error: err});
@@ -25,7 +25,7 @@ exports.userCtrl = ( function () {
     });
   };
 
-  this._create = function (req, res) {
+  var _create = function (req, res) {
     bcrypt.genSalt(10, function(err, salt) {
       bcrypt.hash(req.body.password, salt, function(err, hash) {
         if (!req.body.password) {
@@ -51,7 +51,7 @@ exports.userCtrl = ( function () {
     });
   };
 
-  this._update = function (req, res) {
+  var _update = function (req, res) {
     if (req.body.password) {
       bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(req.body.password, salt, function(err, hash) {
@@ -93,7 +93,7 @@ exports.userCtrl = ( function () {
     }
   };
 
-  this._destroy = function (req, res) {
+  var _destroy = function (req, res) {
     myapp.models.user.findOne({_id: req.params.id}, function (err, user) {
       if (err) {
         res.status(500).send({error: err});
@@ -110,10 +110,10 @@ exports.userCtrl = ( function () {
   };
 
   return {
-    index: this._index,
-    show: this._show,
-    create: this._create,
-    update: this._update,
-    destroy: this._destroy
+    index: _index,
+    show: _show,
+    create: _create,
+    update: _update,
+    destroy: _destroy
   };
 }() );
