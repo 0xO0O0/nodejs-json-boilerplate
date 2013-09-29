@@ -46,7 +46,7 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['jshint', 'simplemocha', 'watch:all']);
 
-  grunt.registerTask('supervise', function() {
+  grunt.registerTask('server', function() {
     this.async();
     require('supervisor').run(['app/app.js']);
   });
