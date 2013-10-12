@@ -8,7 +8,6 @@ var fs = require('fs'),
     express = require('express'),
     passport = require('passport'),
     mongoose = require('mongoose'),
-    cors = require(ROOT + '/lib/cors'),
     Schema = mongoose.Schema;
 
 var config = require(ROOT + '/config/config');
@@ -38,6 +37,7 @@ walk(models_path);
 var privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString();
 var certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString();
 var credentials = {key: privateKey, cert: certificate};
+var cors = require(ROOT + '/lib/cors');
 
 var app = express();
 var secureServer = https.createServer(credentials, app);
