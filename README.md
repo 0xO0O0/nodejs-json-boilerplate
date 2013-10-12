@@ -9,7 +9,7 @@ my own opinions on how things should be laid out.  It's stack consists of:
 * Node.js
 * Express
 * Mongoose (MongoDB object modeling tool)
-* Passport (authentication)
+* Cansecurity (authentication)
 
 A very minimal User model and controller have been implemented to get basic
 authentication working. One can create, list, show, update and destroy a user
@@ -47,41 +47,42 @@ Now you can use a tool like curl or my personal favorite httpie [https://github.
 
 **Login with a POST request**  
 
-    $ http POST localhost:3000/login username=test password=secret
+    $ http POST localhost:3000/login --auth test:secret
     HTTP/1.1 200 OK
+    Access-Control-Expose-Headers: X-CS-Auth,X-CS-User
     Connection: keep-alive
-    Content-Length: 59
-    Content-Type: application/json; charset=utf-8
-    Date: Wed, 25 Sep 2013 18:57:13 GMT
+    Date: Sat, 12 Oct 2013 19:16:41 GMT
+    Transfer-Encoding: chunked
+    X-CS-Auth: success=dcfbba94a25561a1405acb7bcc7d8a51b021534a:test:1381606301826
+    X-CS-User: {"username":"test","hash":"$2a$10$/mPaKKAguhzmlxf1mZivMuS8kFEvjiBzxNlKXONfrinjmg94nJaQO","token":"e1df8416-a77e-4e0f-a6e4-78f594bbf980","_id":"5258d1a6f67bb5b6b3000001","__v":0}
     X-Powered-By: Express
-
-    )]}',
-    {
-      "token": "bcd086d7-8bdb-41b4-a893-e2a5d1895422"
-    }
 
 **Try to get a protected resource**  
 
     $ http localhost:3000/authorized
     HTTP/1.1 401 Unauthorized
+    Access-Control-Expose-Headers: X-CS-Auth,X-CS-User
     Connection: keep-alive
-    Date: Wed, 25 Sep 2013 19:34:20 GMT
-    Transfer-Encoding: chunked
+    Content-Length: 15
+    Content-Type: text/html; charset=utf-8
+    Date: Sat, 12 Oct 2013 19:17:51 GMT
     X-Powered-By: Express
 
-    Unauthorized
+    unauthenticated
 
 **Try to get a protected resource with authorization token**  
 
-    $ http localhost:3000/authorized\?token=bcd086d7-8bdb-41b4-a893-e2a5d1895422
+    $ http localhost:3000/authorized X-CS-Auth:dcfbba94a25561a1405acb7bcc7d8a51b021534a:test:1381606301826
     HTTP/1.1 200 OK
+    Access-Control-Expose-Headers: X-CS-Auth,X-CS-User
     Connection: keep-alive
-    Content-Length: 39
+    Content-Length: 33
     Content-Type: application/json; charset=utf-8
-    Date: Wed, 25 Sep 2013 19:31:46 GMT
+    Date: Sat, 12 Oct 2013 19:18:40 GMT
+    X-CS-Auth: success=c040cb6c83617f1dc43c5fea0f6a0a27b61af41b:test:1381606420094
+    X-CS-User: {"username":"test","hash":"$2a$10$/mPaKKAguhzmlxf1mZivMuS8kFEvjiBzxNlKXONfrinjmg94nJaQO","token":"e1df8416-a77e-4e0f-a6e4-78f594bbf980","_id":"5258d1a6f67bb5b6b3000001","__v":0}
     X-Powered-By: Express
 
-    )]}',
-    {
-      "authorized": "hello world"
-    }
+{
+  "authorized": "hello world"
+}
