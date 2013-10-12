@@ -5,6 +5,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-nodemon');
 
   // Project configuration.
   grunt.initConfig({
@@ -40,16 +41,20 @@ module.exports = function(grunt) {
         files:['spec/**/*.js', 'app/**/*.js', 'lib/**/*.js'],
         tasks:['simplemocha']
       }
+    },
+    nodemon: {
+      dev: {
+        options: {
+          file: 'app/app.js'
+        }
+      }
     }
   });
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'simplemocha', 'watch:all']);
 
-  grunt.registerTask('server', function() {
-    this.async();
-    require('supervisor').run(['app/app.js']);
-  });
+  grunt.registerTask('server', 'nodemon');
 
   grunt.registerTask('test', 'simplemocha');
 };
