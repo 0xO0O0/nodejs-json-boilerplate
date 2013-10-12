@@ -81,6 +81,6 @@ Now you can use a tool like curl or my personal favorite httpie [https://github.
     X-CS-User: {"username":"test","hash":"$2a$10$/mPaKKAguhzmlxf1mZivMuS8kFEvjiBzxNlKXONfrinjmg94nJaQO","token":"e1df8416-a77e-4e0f-a6e4-78f594bbf980","_id":"5258d1a6f67bb5b6b3000001","__v":0}
     X-Powered-By: Express
 
-{
-  "authorized": "hello world"
-}
+    {
+      "authorized": "hello world"
+    }
