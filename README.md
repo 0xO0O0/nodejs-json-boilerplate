@@ -14,9 +14,7 @@ my own opinions on how things should be laid out.  It's stack consists of:
 A very minimal User model and controller have been implemented to get basic
 authentication working. One can create, list, show, update and destroy a user
 as well as protect a route that requires an authentication token.  An
-authentication token can be retrieved by initiating a login.  Currently the
-token is static however to make it more secure it might make more sense to
-generate a unique token on each login.
+authentication token can be retrieved by initiating a login.
 
 The Gruntfile has the following features:
 
