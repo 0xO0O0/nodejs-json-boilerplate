@@ -8,6 +8,7 @@ var fs = require('fs'),
     express = require('express'),
     passport = require('passport'),
     mongoose = require('mongoose'),
+    cors = require(ROOT + '/lib/cors'),
     Schema = mongoose.Schema;
 
 var config = require(ROOT + '/config/config');
@@ -43,6 +44,7 @@ var secureServer = https.createServer(credentials, app);
 var server = http.createServer(app);
 
 app.use(express.logger());        // Log requests to the console
+app.use(cors);                    // Enable CORS
 app.use(express.bodyParser());    // Extract the data from the body of the request
 app.use(passport.initialize());   // Initialize authentication
 
