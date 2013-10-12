@@ -3,27 +3,11 @@ var passport = require('passport');
 
 exports.routes = function(app) {
   // Basic Restful Routes
-  // app.get('/blogs', function (req, res) {
-  //   res.send({route: 'index'});
-  // });
-  // app.get('/blog/add', function (req, res) {
-  //   res.send({route: 'add'});
-  // });
-  // app.get('/blog/:id', function (req, res) {
-  //   res.send({route: 'show'});
-  // });
-  // app.get('/blog/:id/edit', function (req, res) {
-  //   res.send({route: 'edit'});
-  // });
-  // app.post('/blog', function (req, res) {
-  //   res.send({route: 'create'});
-  // });
-  // app.put('/blog/:id', function (req, res) {
-  //   res.send({route: 'update'});
-  // });
-  // app.del('/blog/:id', function (req, res) {
-  //   res.send({route: 'delete'});
-  // });
+  // app.get('/blogs', blogs.index);
+  // app.get('/blog/:id', blogs.show);
+  // app.post('/blog', blogs.create);
+  // app.put('/blog/:id', blogs.update);
+  // app.del('/blog/:id', blogs.destroy);
 
   app.get('/hello', function(req, res){
     res.send({hello: 'world'});
@@ -39,21 +23,12 @@ exports.routes = function(app) {
   });
 
   // USERS
-  app.get('/users', function (req, res) {
-    myapp.controllers.user.index(req,res);
-  });
-  app.get('/user/:id', function (req, res) {
-    myapp.controllers.user.show(req,res);
-  });
-  app.post('/user', function (req, res) {
-    myapp.controllers.user.create(req,res);
-  });
-  app.put('/user/:id', function (req, res) {
-    myapp.controllers.user.update(req,res);
-  });
-  app.del('/user/:id', function (req, res) {
-    myapp.controllers.user.destroy(req,res);
-  });
+  var users = require('../app/controllers/user.js');
+  app.get('/users', users.index);
+  app.get('/user/:id', users.show);
+  app.post('/user', users.create);
+  app.put('/user/:id', users.update);
+  app.del('/user/:id', users.destroy);
 
   // This route enables HTML5Mode by sending missing files an error
   app.all('/*', function(req, res) {

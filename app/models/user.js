@@ -1,29 +1,19 @@
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt'),
+    mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    validations = require('../../lib/validations.js');
 
-exports.User = ( function () {
-  var mongoose = require('mongoose');
-  var Schema = mongoose.Schema;
+var ContactSchema = new Schema({
+  username: String,
+  hash: String,
+  token: String
+});
 
-  var _schema = new Schema({
-    username: String,
-    hash: String,
-    token: String
-  });
+ContactSchema.path('username').validate(validations.required, 'Username required');
+ContactSchema.path('hash').validate(validations.required, 'Password required');
 
-  var _model = mongoose.model('User', _schema);
-
-  var required = function (value) {
-    if (value) {
-      return true; 
-    }
-
-    return false;
-  };
-
-  _schema.path('username').validate(required, 'Invalid');
-  _schema.path('hash').validate(required, 'Invalid');
-
-  var _isPasswordValid = function (password, done, userFound, fn) {
+ContactSchema.methods = {
+  isPasswordValid: function (password, done, userFound, fn) {
     bcrypt.compare(password, userFound.hash, function (err, res) {
       if (res) {
         // match
@@ -34,11 +24,7 @@ exports.User = ( function () {
         fn('Credentials are invalid', done, userFound);
       }
     });
-  };
+  }
+};
 
-  return {
-    schema: _schema,
-    model: _model,
-    isPasswordValid: _isPasswordValid
-  };
-}() );
+mongoose.model('User', ContactSchema);

@@ -1,3 +1,4 @@
+
 var request = require('supertest'),
     express = require('express'),
     assert = require('assert'),
@@ -5,11 +6,30 @@ var request = require('supertest'),
     config = require('../config/config'),
     passport = require('passport'),
     mongoose = require('mongoose'),
-    path = require('path');
+    path = require('path'),
+    fs = require('fs');
 
 var ROOT = path.resolve(__dirname) + '/..';
 
-mongoose.connect('mongodb://localhost/restapp');
+mongoose.connect('mongodb://socketwiz/restapp');
+
+// bootstrap models
+var models_path = ROOT + '/app/models';
+// borrowed walk method from https://github.com/linnovate/mean/blob/master/server.js
+var walk = function(path) {
+  fs.readdirSync(path).forEach(function(file) {
+    var newPath = path + '/' + file;
+    var stat = fs.statSync(newPath);
+    if (stat.isFile()) {
+      if (/(.*)\.(js)/.test(file)) {
+        require(newPath);
+      }
+    } else if (stat.isDirectory()) {
+      walk(newPath);
+    }
+  });
+};
+walk(models_path);
 
 require(ROOT + '/lib/security').Security();
 
