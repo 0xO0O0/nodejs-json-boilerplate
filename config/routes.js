@@ -1,7 +1,5 @@
 
-var passport = require('passport');
-
-exports.routes = function(app) {
+exports.routes = function(app, cansec) {
   // Basic Restful Routes
   // app.get('/blogs', blogs.index);
   // app.get('/blog/:id', blogs.show);
@@ -13,12 +11,12 @@ exports.routes = function(app) {
     res.send({hello: 'world'});
   });
 
-  app.post('/login', passport.authenticate('rest'), function (req, res) {
-    res.send({token: req.user.token});
+  app.post('/login', cansec.restrictToLoggedIn, function (req, res) {
+    res.send();
   });
 
   // Protected ROUTE
-  app.get('/authorized', passport.authenticate('rest'), function(req, res){
+  app.get('/authorized', cansec.restrictToLoggedIn, function(req, res){
     res.send({authorized: 'hello world'});
   });
 

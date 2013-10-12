@@ -6,7 +6,7 @@ var fs = require('fs'),
     http = require('http'),
     https = require('https'),
     express = require('express'),
-    passport = require('passport'),
+    cs = require('cansecurity'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
@@ -37,7 +37,10 @@ walk(models_path);
 var privateKey  = fs.readFileSync(ROOT + '/app/cert/privatekey.pem').toString();
 var certificate = fs.readFileSync(ROOT + '/app/cert/certificate.pem').toString();
 var credentials = {key: privateKey, cert: certificate};
+
 var cors = require(ROOT + '/lib/cors');
+var security = require(ROOT + '/lib/security');
+var cansec = cs.init(security.init);
 
 var app = express();
 var secureServer = https.createServer(credentials, app);
@@ -45,14 +48,13 @@ var server = http.createServer(app);
 
 app.use(express.logger());        // Log requests to the console
 app.use(cors);                    // Enable CORS
-app.use(express.bodyParser());    // Extract the data from the body of the request
-app.use(passport.initialize());   // Initialize authentication
+app.use(cansec.validate);         // Initialize authentication
+app.use(express.errorHandler({    // A standard error handler
+  dumpExceptions: true, 
+  showStack: true 
+}));
 
-require(ROOT + '/lib/security').Security();
-require(ROOT + '/config/routes').routes(app);
-
-// A standard error handler - it picks up any left over errors and returns a nicely formatted server 500 error
-app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+require(ROOT + '/config/routes').routes(app, cansec);
 
 // Start up the server on the port specified in the config
 server.listen(config.server.listenPort, '0.0.0.0', 511, function() {
