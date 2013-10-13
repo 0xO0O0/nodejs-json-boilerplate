@@ -43,6 +43,25 @@ Follow the installation instructions for each of those packages.
 
 Now you can use a tool like curl or my personal favorite httpie [https://github.com/jkbr/httpie](https://github.com/jkbr/httpie).
 
+**Create a user account**
+    $ http POST localhost:3000/user username=test password=secret
+    HTTP/1.1 200 OK
+    Access-Control-Expose-Headers: X-CS-Auth,X-CS-User
+    Connection: keep-alive
+    Content-Length: 172
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 13 Oct 2013 19:05:51 GMT
+    X-Powered-By: Express
+
+    {
+        "user": {
+            "__v": 0,
+            "_id": "525aef0f522c9cae4f000001",
+            "hash": "$2a$10$dbeLDvEXhgZGaqSudaM6ZOr19EBoXyfq8I74KRca.ho6oC1njMz0a",
+            "username": "test"
+        }
+    }
+
 **Login with a POST request**  
 
     $ http POST localhost:3000/login --auth test:secret
