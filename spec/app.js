@@ -38,6 +38,7 @@ var cansec = cs.init(security.init);
 var app = express();
 app.use(cors);
 app.use(cansec.validate);
+app.use(express.bodyParser());    // Needed for POST requests
 
 require('../config/routes').routes(app, cansec);
 
@@ -66,10 +67,20 @@ describe('Node API Server', function() {
         done();
       });
   });
+  it('Should create a user', function() {
+    request(app)
+      .post('/user')
+      .send({username: 'authorized', password: 'user'})
+      .expect(200)
+      .end(function(err,res) {
+        res.body.should.have.property('user');
+        // done();
+      });
+  });
   it('Should login', function(done) {
     request(app)
       .post('/login')
-      .auth('test', 'secret')
+      .auth('authorized', 'user')
       .expect(200)
       .end(function(err,res) {
         res.header['x-cs-auth'].should.include('success');
@@ -79,7 +90,7 @@ describe('Node API Server', function() {
   it('Should use a token to access an authorized resource', function(done) {
     request(app)
       .post('/login')
-      .auth('test', 'secret')
+      .auth('authorized', 'user')
       .expect(200)
       .end(function(err,res) {
         var x_cs_auth = res.header['x-cs-auth'].split('=');
