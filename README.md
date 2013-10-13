@@ -43,7 +43,8 @@ Follow the installation instructions for each of those packages.
 
 Now you can use a tool like curl or my personal favorite httpie [https://github.com/jkbr/httpie](https://github.com/jkbr/httpie).
 
-**Create a user account**
+**Create a user account** 
+
     $ http POST localhost:3000/user username=test password=secret
     HTTP/1.1 200 OK
     Access-Control-Expose-Headers: X-CS-Auth,X-CS-User
