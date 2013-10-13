@@ -49,6 +49,7 @@ var server = http.createServer(app);
 app.use(express.logger());        // Log requests to the console
 app.use(cors);                    // Enable CORS
 app.use(cansec.validate);         // Initialize authentication
+app.use(express.bodyParser());    // Needed for POST requests
 app.use(express.errorHandler({    // A standard error handler
   dumpExceptions: true, 
   showStack: true 
