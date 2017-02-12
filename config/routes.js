@@ -7,12 +7,8 @@ exports.routes = function(app, cansec) {
   // app.put('/blog/:id', blogs.update);
   // app.del('/blog/:id', blogs.destroy);
 
-  app.get('/hello', function(req, res){
+  app.get('/market-data', function(req, res){
     res.send({hello: 'world'});
-  });
-
-  app.post('/login', cansec.restrictToLoggedIn, function (req, res) {
-    res.send();
   });
 
   // Protected ROUTE

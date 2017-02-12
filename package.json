@@ -1,6 +1,6 @@
 {
-  "name": "my-server",
-  "description": "My API Server",
+  "name": "optiqly-server",
+  "description": "Optiqly API Server",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
